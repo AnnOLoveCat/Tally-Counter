@@ -2,21 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/src/style.css">
+    <link rel="stylesheet" href="src/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tally Counter</title>
 </head>
 <body>
     <div class="container">
-        <div class="click click-up">
+        <div class="click click-up" tabindex="0"></div>
+        <div class="number" id="counter" data-min="0" data-max="999" data-step="1">0</div>
+        <div class="click click-down" tabindex="0"></div>
+
+        
+        <div class="controls" aria-hidden="true" hidden>
+            <button id="resetBtn" type="button">重設</button>
+            <input id="setInput" type="number" placeholder="設定數值" />
+            <button id="setBtn" type="button">套用</button>
         </div>
-        <div class="number">
-            0
-        </div>
-        <div class="click click-down">
-        </div>
-    </div>
+  </div>
     
-    <script src="/src/click.js" />
+    <script src="src/click.js" />
 </body>
 </html>

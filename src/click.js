@@ -1,10 +1,13 @@
 // JavaScript
-// STEP 1: 透過 querySelector 選擇到 HTML 中的「箭頭」元素
+// STEP 1: 透過 querySelector 選擇到 HTML 中的「箭頭」、「數字」元素
+const container = document.querySelector('.container');
 const upElement = document.querySelector('.click-up');
 const downElement = document.querySelector('.click-down');
+const numberElement = document.querySelector('.counter');
 
-// STEP 2: 透過 querySelector 選擇到 HTML 中的「數字」元素
-const numberElement = document.querySelector('.number');
+const step = toNum(container.dataset.step, 1);
+const min  = has(container.dataset.min) ? Number(container.dataset.min) : -Infinity;
+const max  = has(container.dataset.max) ? Number(container.dataset.max) :  Infinity;
 
 // STEP 3: 監聽 click 事件，並執行對應的行為
 upElement.addEventListener('click', (e) => {
