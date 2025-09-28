@@ -21,6 +21,32 @@ body {
   flex-direction: column;
 }
 
+/* 提示泡泡（預設隱藏） */
+.hint {
+  position: absolute;
+  top: -8px;               /* 在數字上方；可依喜好調整 */
+  left: 50%;
+  transform: translate(-50%, -6px) scale(0.98);
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(16, 55, 92, 0.92); /* 深藍底 */
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,.15);
+}
+
+/* 顯示狀態 */
+.hint.show {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+
+
 .number {
   font-size: 72px;
   color: #000000;
@@ -61,6 +87,23 @@ body {
 
 .click:focus { 
   outline: 2px solid #f5b7b7; outline-offset: 2px; 
+}
+
+/* 按鍵被觸發時發亮 */
+.click.active {
+  outline: 2px solid #005A9C;
+  outline-offset: 2px;
+  transform: translateY(1px) scale(0.98);
+}
+
+/* 數字閃動一下（可用於加/減時） */
+@keyframes flashBump {
+  0%   { transform: scale(1);   }
+  30%  { transform: scale(1.06); }
+  100% { transform: scale(1);   }
+}
+.number.flash {
+  animation: flashBump .18s ease;
 }
 
 .number.error { 

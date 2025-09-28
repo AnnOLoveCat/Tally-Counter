@@ -71,15 +71,56 @@ render(value);
 // 之後若要「同步 localStorage / 送到後端 / 觸發動畫」，可以在更新流程插入，或在 render 加上你的 hook。
 
 
+// ===== hints =====
+
+const hintElement  = document.createElement('div')
+hintElement.className ='hint';
+container.appendChild(hintElement)
+
+let hintTimer  = null;
+let activeTimer = null;
+
+function showFeedback(dir /* +1 or -1 */) {
+  if(!hintElement) return;
+
+  const sign  = dir > 0 ? '↑' : '↓';
+  const delta = dir > 0 ? `+${STEP}` : `-${STEP}`;
+  hintElement.textContent = `${sign} ${delta}`;
+
+  // 顯示提示泡泡
+  hintElement.classList.add('show');
+  clearTimeout(hintTimer);
+  hintTimer = setTimeout(() =>{
+    hintElement.classList.remove('show')
+  }, 600) //停留時間（毫秒）
+
+  // 對應按鈕高亮
+  const targetBtn = dir > 0 ? upElement : downElement;
+  if (targetBtn) {
+    targetBtn.classList.add('active');
+    clearTimeout(activeTimer);
+    activeTimer = setTimeout(() => targetBtn.classList.remove('active'), 180);
+  }  
+
+  // 數字閃動（重啟動畫）
+  numberElement.classList.remove('flash'); // 先移除再觸發，讓連續觸發也有效
+  // 強制重排以重啟動畫（保險）
+  // eslint-disable-next-line no-unused-expressions
+  numberElement.offsetHeight;
+  numberElement.classList.add('flash');
+}
+
 // ===== interactions: click =====
 upElement?.addEventListener('click', () => {
   value = clamp(value + STEP);
   render(value);
+  showFeedback(+1);
 });
 
 downElement?.addEventListener('click', () => {
   value = clamp(value - STEP);
   render(value);
+  showFeedback(-1);
 });
 
 const isTypingTarget = (el) => {
@@ -101,6 +142,7 @@ function stopRepeat() {
 function stepOnce(dir) {
   value = clamp(value + dir * STEP);
   render(value);
+  showFeedback(dir);
 }
 
 document.addEventListener('keydown', (e) => {
@@ -108,6 +150,7 @@ document.addEventListener('keydown', (e) => {
   if (e.ctrlKey || e.metaKey || e.altKey) return;
 
   const lower = e.key.toLowerCase();
+  
   let dir = 0;
   if (e.key === 'ArrowUp'   || lower === 'w') dir = +1;
   if (e.key === 'ArrowDown' || lower === 's') dir = -1;
